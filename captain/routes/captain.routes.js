@@ -1,15 +1,21 @@
-const express = require('express');
+import express from "express";
+import {
+  register,
+  login,
+  logout,
+  profile,
+  toggleAvailability,
+  waitForNewRide,
+} from "../controllers/captain.controller";
+import { captainAuth } from "../middleware/authMiddleWare";
+
 const router = express.Router();
-const captainController = require('../controllers/captain.controller');
-const authMiddleware = require('../middleware/authMiddleware');
 
+router.post("/register", register);
+router.post("/login", login);
+router.get("/logout", logout);
+router.get("/profile", captainAuth, profile);
+router.patch("/toggle-availability", captainAuth, toggleAvailability);
+router.get("/new-ride", captainAuth, waitForNewRide);
 
-router.post('/register', captainController.register);
-router.post('/login', captainController.login);
-router.get('/logout', captainController.logout);
-router.get('/profile', authMiddleware.captainAuth, captainController.profile);
-router.patch('/toggle-availability', authMiddleware.captainAuth, captainController.toggleAvailability);
-router.get('/new-ride', authMiddleware.captainAuth, captainController.waitForNewRide);
-
-
-module.exports = router;
+export default router;

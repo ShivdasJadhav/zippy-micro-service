@@ -1,13 +1,19 @@
-const express = require('express');
+import express from "express";
+import {
+  register,
+  login,
+  logout,
+  profile,
+  acceptedRide,
+} from "../controllers/user.controller";
+import userAuth from "../middleware/authMiddleWare";
+
 const router = express.Router();
-const userController = require('../controllers/user.controller');
-const authMiddleware = require('../middleware/authMiddleware');
 
+router.post("/register", register);
+router.post("/login", login);
+router.get("/logout", logout);
+router.get("/profile", userAuth, profile);
+router.get("/accepted-ride", userAuth, acceptedRide);
 
-router.post('/register', userController.register);
-router.post('/login', userController.login);
-router.get('/logout', userController.logout);
-router.get('/profile', authMiddleware.userAuth, userController.profile);
-router.get('/accepted-ride',authMiddleware.userAuth, userController.acceptedRide);
-
-module.exports = router;
+export default router;

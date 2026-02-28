@@ -1,21 +1,13 @@
-const dotenv = require('dotenv')
-dotenv.config()
-const express = require('express')
-const app = express()
-const connect = require('./db/db')
-connect()
-const captainRoutes = require('./routes/captain.routes')
-const cookieParser = require('cookie-parser')
-const rabbitMq = require('./service/rabbit')
+import express from "express";
+import captainRoutes from "./routes/captain.routes";
+import cookieParser from "cookie-parser";
 
-rabbitMq.connect()
+const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
+app.use("/", captainRoutes);
 
-
-app.use('/', captainRoutes)
-
-module.exports = app
+export default app;

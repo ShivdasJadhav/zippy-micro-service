@@ -1,12 +1,13 @@
-const userModel = require('../models/user.model');
-const blacklisttokenModel = require('../models/blacklisttoken.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { subscribeToQueue } = require('../service/rabbit')
-const EventEmitter = require('events');
+import userModel from '../models/user.model';
+import blacklisttokenModel from '../models/blacklisttoken.model';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { subscribeToQueue } from '../service/rabbit';
+import EventEmitter from 'events';
+
 const rideEventEmitter = new EventEmitter();
 
-module.exports.register = async (req, res) => {
+export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const user = await userModel.findOne({ email });
@@ -32,7 +33,7 @@ module.exports.register = async (req, res) => {
     }
 }
 
-module.exports.login = async (req, res) => {
+export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await userModel
@@ -65,7 +66,7 @@ module.exports.login = async (req, res) => {
 
 }
 
-module.exports.logout = async (req, res) => {
+export const logout = async (req, res) => {
     try {
         const token = req.cookies.token;
         await blacklisttokenModel.create({ token });
@@ -76,7 +77,7 @@ module.exports.logout = async (req, res) => {
     }
 }
 
-module.exports.profile = async (req, res) => {
+export const profile = async (req, res) => {
     try {
         res.send(req.user);
     } catch (error) {
@@ -84,7 +85,7 @@ module.exports.profile = async (req, res) => {
     }
 }
 
-module.exports.acceptedRide = async (req, res) => {
+export const acceptedRide = async (req, res) => {
     // Long polling: wait for 'ride-accepted' event
     rideEventEmitter.once('ride-accepted', (data) => {
         res.send(data);

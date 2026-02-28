@@ -1,11 +1,10 @@
-const express = require('express');
+import express from "express";
+import { userAuth, captainAuth } from "../middleware/auth.middleware";
+import { createRide, acceptRide } from "../controller/ride.controller";
+
 const router = express.Router();
-const authMiddleware = require('../middleware/auth.middleware');
-const rideController = require('../controller/ride.controller')
 
+router.post("/create-ride", userAuth, createRide);
+router.put("/accept-ride", captainAuth, acceptRide);
 
-router.post('/create-ride', authMiddleware.userAuth, rideController.createRide)
-router.put('/accept-ride',authMiddleware.captainAuth, rideController.acceptRide)
-
-
-module.exports = router;
+export default router;
