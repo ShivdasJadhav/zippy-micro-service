@@ -1,0 +1,57 @@
+
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - JWT_SECRET=uber-has-dev-shiv's-back
+      - MONGO_URL=mongodb://mongodb:27017/zippy-user
+      - RABBIT_URL=amqp://guest:guest@my-rabbit:5672
+    depends_on:
+      - mongodb
+      - my-rabbit
+
+  captain-service:
+    build: ./captain-service
+    ports:
+      - "3002:3002"
+    environment:
+      - JWT_SECRET=uber-has-dev-shiv's-back
+      - MONGO_URL=mongodb://mongodb:27017/zippy-captain
+      - RABBIT_URL=amqp://guest:guest@my-rabbit:5672
+    depends_on:
+      - mongodb
+      - my-rabbit
+
+  ride-service:
+    build: ./ride-service
+    ports:
+      - "3003:3003"
+    environment:
+      - JWT_SECRET=uber-has-dev-shiv's-back
+      - MONGO_URL=mongodb://mongodb:27017/zippy-ride
+      - RABBIT_URL=amqp://guest:guest@my-rabbit:5672
+    depends_on:
+      - mongodb
+      - my-rabbit
+
+  service-gateway:
+    build: ./service-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - user-service
+      - captain-service
+      - ride-service
+
+  mongodb: # Renamed from mongo-db to match your env strings
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  my-rabbit: # Added missing service
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
