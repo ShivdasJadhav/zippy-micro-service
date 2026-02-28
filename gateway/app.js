@@ -10,5 +10,5 @@ app.use('/ride', expressProxy('http://localhost:3003'))
 
 
 app.listen(3000, () => {
-    console.log('Gateway server listening on port 3000')
+    console.log('[Gateway server] listening on port 3000')
 })
