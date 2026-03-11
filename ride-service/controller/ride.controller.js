@@ -1,5 +1,5 @@
 import rideModel from "../models/ride.model";
-import { subscribeToQueue, publishToQueue } from "../service/rabbit";
+import { publishToQueue } from "../service/rabbit";
 
 export const createRide = async (req, res, next) => {
   const { pickup, destination } = req.body;
